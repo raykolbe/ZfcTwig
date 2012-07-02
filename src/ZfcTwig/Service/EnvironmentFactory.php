@@ -15,15 +15,15 @@ class EnvironmentFactory implements FactoryInterface
     {
         $config = $serviceLocator->get('Configuration');
         $config = $config['zfctwig'];
-        $manager = $serviceLocator->get('ViewHelperManager');
-
+        $broker = $serviceLocator->get('ViewHelperBroker');
+        
         $loader = new AbsoluteFilesystem();
         $resolver = $serviceLocator->get('ViewResolver'); 
         $loader->setFallbackResolver($resolver);
 
         $twig = new Environment($loader, $config['config']);
         $twig->addExtension(new Extension($twig, $serviceLocator));
-        $twig->setManager($manager);
+        $twig->setHelperBroker($broker);
 
         foreach($config['extensions'] as $ext) {
             if (!is_string($ext)) {
